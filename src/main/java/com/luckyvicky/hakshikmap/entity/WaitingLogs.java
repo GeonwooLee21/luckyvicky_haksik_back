@@ -12,16 +12,15 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "waitingLogs")
-public class waitingLogs {
+public class WaitingLogs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;                          // 로그 ID
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurantId2", nullable = false)
-    private restaurants restaurant;           // 어떤 식당의 로그인지
+    @JoinColumn(name = "restaurantId", nullable = false)
+    private Long restaurant;           // 어떤 식당의 로그인지
 
     @Column(name = "loggedTime", nullable = false)
     private LocalDateTime loggedTime;        // 이 데이터가 의미하는 시각

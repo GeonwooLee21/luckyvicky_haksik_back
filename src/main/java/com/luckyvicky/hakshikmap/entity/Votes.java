@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "votes")
-public class votes {
+public class Votes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +20,12 @@ public class votes {
     private Long id;                           // 각 투표 ID
 
     // 학식당 FK
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurantId", nullable = false)
-    private restaurants restaurant;            // 어떤 식당에 대한 투표인지
+    private Long restaurantId;            // 어떤 식당에 대한 투표인지
 
     // 유저 FK
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
-    private users user;                        // 어떤 유저(세션)가 한 투표인지
+    private Long userId;                        // 어떤 유저(세션)가 한 투표인지
 
     @Column(name = "congestionLevel", nullable = false, length = 10)
     private String congestionLevel;           // 혼잡도: "HIGH" / "MID" / "LOW"

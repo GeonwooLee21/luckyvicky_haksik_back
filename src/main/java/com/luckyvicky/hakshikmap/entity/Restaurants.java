@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @Builder
 @Entity
 @Table(name = "restaurants")
-public class restaurants {
+public class Restaurants {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +33,7 @@ public class restaurants {
 
     @Column(name = "dinnerClose")
     private LocalTime dinnerClose; // 저녁 종료 시간
+
+    @Column(name = "currentCongestion")
+    private int currentCongestion;
 }
