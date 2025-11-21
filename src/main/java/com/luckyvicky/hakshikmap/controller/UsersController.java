@@ -1,11 +1,10 @@
 package com.luckyvicky.hakshikmap.controller;
 
 import com.luckyvicky.hakshikmap.dto.UserRes;
+import com.luckyvicky.hakshikmap.dto.UserVoteCountRes;
 import com.luckyvicky.hakshikmap.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor // 생성자 자동으로 만들어 줌
@@ -16,5 +15,12 @@ public class UsersController {
     @PostMapping
     public UserRes create() {
         return userService.create();
+    }
+
+    @GetMapping("/vote")
+    public UserVoteCountRes getUserVoteCount(
+            @RequestHeader("{user-token}") String token
+    ) {
+        return userService.getUserVoteCount(token);
     }
 }
