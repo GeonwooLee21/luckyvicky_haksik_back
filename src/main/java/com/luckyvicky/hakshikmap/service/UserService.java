@@ -38,6 +38,4 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 토큰을 가진 유저가 없습니다."));
         return UserVoteCountRes.from(user);
     }
-
-
 }

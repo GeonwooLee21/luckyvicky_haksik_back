@@ -3,13 +3,11 @@ package com.luckyvicky.hakshikmap.controller;
 import com.luckyvicky.hakshikmap.dto.VoteReq;
 import com.luckyvicky.hakshikmap.service.VoteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/vote")
 public class VotesController {
 

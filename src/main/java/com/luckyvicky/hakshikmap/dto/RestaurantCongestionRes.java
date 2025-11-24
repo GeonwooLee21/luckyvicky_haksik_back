@@ -5,7 +5,7 @@ import com.luckyvicky.hakshikmap.entity.Restaurants;
 public record RestaurantCongestionRes(
         Long id,
         String name,
-        int congestion
+        int currentCongestion
 ) {
     static public RestaurantCongestionRes from(Restaurants restaurants) {
         return new RestaurantCongestionRes(
