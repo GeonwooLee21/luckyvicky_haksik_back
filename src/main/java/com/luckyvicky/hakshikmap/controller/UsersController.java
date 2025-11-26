@@ -20,7 +20,7 @@ public class UsersController {
 
     @GetMapping("/vote")
     public UserVoteCountRes getUserVoteCount(
-            @RequestHeader("{user-token}") String token
+            @RequestHeader("user-token") String token
     ) {
         return userService.getUserVoteCount(token);
     }
