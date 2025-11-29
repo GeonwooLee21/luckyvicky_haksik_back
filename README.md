@@ -313,7 +313,7 @@ src/
 
 # ▶ Python
 
-### 입력 데이터 처리 (`/api/wait-time`)
+### 1. 입력 데이터 처리 (`/api/wait-time`)
 
 - Spring에서 전달된 JSON을 받아 학식당ID, 기준 시간, 투표 기록을 파싱한다.
 - 투표 기록은 각 요소가 **`{투표 시각, 가중치, 체감 대기 시간}`** 형태인 리스트로 들어온다.
@@ -336,19 +336,49 @@ src/
 
 ### 3. 가중 평균 대기시간 계산 로직 (`compute_wait_time`)
 
-- 각 유효 투표에 대해 혼잡도 가중치와 시간 가중치를 곱한 최종 가중치 **wi**를 정의한다.
-    - 기본형: **wi = weighti** (필요 시 시간 가중치 추가 가능)
-- 각 투표의 대기시간을 **ti**라 할 때, 예측 대기시간은
+- Spring에서 전달하는 각 투표는 다음 정보를 가진다.
+    - `votedTime` : 투표 시각
+    - `weight` : 혼잡도 가중치 (1/2/3)
+    - `waitingTime` : 사용자가 입력한 대기시간(분)
+- 기준 시각 `baseTime` 과 각 투표의 시각 `votedTime` 사이의 시간 차이를 **분 단위**로 계산한다.
     
-    <img width="306" height="77" alt="image (3)" src="https://github.com/user-attachments/assets/5912458a-9032-4f16-8c93-95c523bc20b5" />
-    
-    로 계산한다.
-    
-   <img width="521" height="280" alt="image (4)" src="https://github.com/user-attachments/assets/ca7a846c-29fb-4bdf-803f-919917a494e4" />
+    <img width="310" height="67" alt="image" src="https://github.com/user-attachments/assets/eb09728a-733a-420d-8033-27018f324063" />
 
     
-- 결과가 음수일 경우 0으로 보정하고, `round()`를 사용해 정수(분)로 반올림하여 예상 대기시간으로 반환한다.
+- “최근 10분” 조건은 다음과 같다.
+    
+   <img width="140" height="35" alt="image (1)" src="https://github.com/user-attachments/assets/b14edb1a-98e9-4f90-8428-a35f8b8903d3" />
 
+    <img width="356" height="59" alt="image (2)" src="https://github.com/user-attachments/assets/1192e888-5fd2-4e83-aa1d-d6884af3ef2d" />
+
+    
+- 위 조건을 만족하는 투표만 **유효 투표(effective votes)** 로 사용한다.
+
+### 시간 가중치(Time Weight)
+
+- 같은 혼잡도라도, **최근에 찍힌 투표일수록 더 중요하게** 반영한다.
+    
+   <img width="474" height="96" alt="image (3)" src="https://github.com/user-attachments/assets/51659da9-914e-4502-ae24-069d61613018" />
+
+    <img width="246" height="84" alt="image (4)" src="https://github.com/user-attachments/assets/2bbdab01-c45b-4619-a219-682320cb75fd" />
+
+    
+- 최종 가중치 Wi는 혼잡도 weight와 시간 가중치를 곱해서 만든다.
+    
+  <img width="212" height="50" alt="image (5)" src="https://github.com/user-attachments/assets/227b4788-e09d-4ed0-9ff9-5d1504946a60" />
+    
+
+### 가중 평균 대기시간 계산
+
+- 각 유효 투표의 대기시간을 tit_iti (waitingTime) 라고 하면,T^=∑i=1nWi∑i=1n(ti⋅Wi)
+    
+    **예측 대기시간 T^\hat{T}T^** 는 가중 평균으로 계산한다.
+    
+   <img width="238" height="65" alt="image (6)" src="https://github.com/user-attachments/assets/1d7e4bad-ff5b-4f4e-8d70-06c9c7ba3ff6" />
+    
+- 분자: 각 투표의 대기시간 × 해당 투표의 중요도의 합
+- 분모: 전체 중요도의 합
+- 계산 후, 음수가 나오면 0으로 보정하고, 반올림하여 **정수(분)** 로 사용한다.
 ---
 
 # ▶ Server
