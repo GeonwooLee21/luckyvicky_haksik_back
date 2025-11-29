@@ -45,7 +45,7 @@ public class CongestionService {
             if (votes.isEmpty()) {
                 // 최근 30분간 투표가 없다면, 일단 0으로 두거나,
                 // 그대로 유지할지 정책을 정해서 작성
-                //db에 있는 값 그대로 사용하기
+                // -> db에 있는 값 그대로 사용하기
                 continue;
             }
 
